@@ -61,6 +61,10 @@ public:
         SYSTEM_INT = 9UL,
     };
 
+    static const uint64 TIMER_CAUSE = 0x8000000000000001;
+    static const uint64 CONSOLE_HANDLER_CAUSE = 0x8000000000000009;
+    static const uint64 ECALL_USER_CAUSE = 0x08;
+    static const uint64 ECALL_SYSTEM_CAUSE = 0x09;
 
     static void ms_sstatus(uint64 mask);
     static void mc_sstatus(uint64 mask);
@@ -81,9 +85,6 @@ public:
 private:
 
     static void handleSupervisorTrap();
-
-    static const uint64 TIMER_CAUSE = 0x8000000000000001;
-    static const uint64 CONSOLE_HANDLER_CAUSE = 0x8000000000000009;
 
 };
 

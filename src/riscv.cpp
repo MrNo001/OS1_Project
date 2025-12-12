@@ -85,7 +85,6 @@ void Riscv::handleSupervisorTrap() {
     if(scause == TIMER_CAUSE){
         Riscv::system_time++;
         TCB::timeSliceCounter++;
-        //printIntegerNewLine(Riscv::system_time);
         Scheduler::wakeSleeping();
         if(TCB::timeSliceCounter >= TCB::running->getTimeSlice())
         {
@@ -99,7 +98,7 @@ void Riscv::handleSupervisorTrap() {
         mc_sip(SIP_SSIP);
         return;
     }
-    if ((scause == 0x0000000000000009) || (scause == 0x0000000000000008)) {
+    if ((scause == ECALL_SYSTEM_CAUSE) || (scause == ECALL_USER_CAUSE)) {
 
         volatile uint64 op_code;
         __asm__ volatile("mv %0,a0":"=r"(op_code));
@@ -107,7 +106,6 @@ void Riscv::handleSupervisorTrap() {
         volatile uint64 sepc;
         sepc=r_sepc();
         volatile uint64 sstatus = r_sstatus();
-
 
         switch (op_code) {
             case 0x01: MemoryAllocator::memAllocSCHandler(); break;
@@ -141,6 +139,8 @@ void Riscv::handleSupervisorTrap() {
         return;
     }
 
+    //Todo 
+    //Change so it stops the emulator
     printString("Unexpected: ");
     printIntegerNewLine(r_scause());
     printString(int_to_hex(r_sepc()));

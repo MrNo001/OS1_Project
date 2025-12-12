@@ -155,11 +155,26 @@ int MemoryAllocator::mem_free(void* mem_to_free){
 }
 
 
+size_t MemoryAllocator::mem_get_free_space(){
+    size_t free_space = 0;
+    for(MemHeader* current = free_list_head; current != nullptr; current = current->next ){
+        free_space += current->mem_size;
+    }
+    return free_space;
+}
+
+size_t MemoryAllocator::mem_get_largest_free_block(){
+    size_t largest_free_block_size = 0;
+    for(MemHeader* current = free_list_head; current != nullptr; current = current->next ){
+        if(current->mem_size > largest_free_block_size) largest_free_block_size = current->mem_size;
+    }
+    return largest_free_block_size;
+}
 
 
 void MemoryAllocator::memAllocSCHandler(){
     size_t size;
-    __asm__ volatile(" mv %0,a1" : "=r"(size));
+    __asm__ volatile (" mv %[size],a1" : [size]"=r"(size));
     void* addr = mem_alloc(size);
     Riscv::w_a0((uint64)addr );
 }
@@ -169,6 +184,16 @@ void MemoryAllocator::memFreeSCHandler() {
     __asm__ volatile (" mv %[addr],a1" : [addr]"=r"(addr));
     int result = mem_free((void*) addr);
     Riscv::w_a0((uint64) result );
+}
+
+void MemoryAllocator::memGetFreeSpaceSCHAndler(){
+    size_t result = MemoryAllocator::mem_get_free_space();
+    Riscv::w_a0((uint64) result);
+}
+
+void MemoryAllocator::memGetLargestFreeBlockSCHandler(){
+    size_t result = MemoryAllocator::mem_get_largest_free_block();
+    Riscv::w_a0((uint64) result);
 }
 
 void* MemoryAllocator::kmalloc(size_t size){
