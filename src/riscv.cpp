@@ -6,6 +6,7 @@
 #include "../h/KSemaphore.hpp"
 #include "../h/KConsole.hpp"
 #include "../h/Scheduler.hpp"
+#include "Kernel.hpp"
 
 
 
@@ -139,19 +140,12 @@ void Riscv::handleSupervisorTrap() {
         return;
     }
 
-    //Todo 
-    //Change so it stops the emulator
-    printString("Unexpected: ");
-    printIntegerNewLine(r_scause());
-    printString(int_to_hex(r_sepc()));
-    printString("\n");
-    printIntegerNewLine(r_sstatus());
 
-    while(1){
+    print("Unexpected: "); println(r_scause());
+    println(int_to_hex(r_sepc()));
+    println(r_sstatus());
 
-    }
-
-    return;
+    Kernel::stopEmulator();
 
 }
 
