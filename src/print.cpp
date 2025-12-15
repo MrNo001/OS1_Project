@@ -34,7 +34,7 @@ void print(char const *string)
     Riscv::ms_sstatus(sstatus & Riscv::SSTATUS_SIE ? Riscv::SSTATUS_SIE : 0);
 }
 
-void println(uint64 integer)
+void print(uint64 integer)
 {
     uint64 sstatus = Riscv::r_sstatus();
     Riscv::mc_sstatus(Riscv::SSTATUS_SIE);
@@ -66,6 +66,6 @@ void println(uint64 integer)
 }
 
 void println(uint64 integer){
-    println(integer);
+    print(integer);
     __putc('\n');
 }

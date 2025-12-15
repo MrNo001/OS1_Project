@@ -14,6 +14,9 @@ class TCB{
 
 public:
 
+    void* operator new(size_t size);
+    void operator delete(void* addr);
+
     static int counter_id;
 
     int thread_id;
@@ -22,17 +25,13 @@ public:
 
     ~TCB(){ if(stack != nullptr) MemoryAllocator::kfree(stack);}
 
-    TCB(Body body , void* args,uint64* stack = (uint64*)MemoryAllocator::kmalloc(DEFAULT_STACK_SIZE) , uint64 timeSlice=DEFAULT_TIME_SLICE);
+    TCB(Body body , void* args, uint64* stack = (uint64*)MemoryAllocator::kmalloc(DEFAULT_STACK_SIZE), uint64 timeSlice = DEFAULT_TIME_SLICE);
 
     bool isFinished() const {return finished;}
 
     void setFinished(bool value) { finished = value; }
 
     uint64 getTimeSlice() const { return timeSlice; }
-
-
-
-
 
 
 private:
@@ -75,9 +74,6 @@ private:
     static void threadDeleteSCHandler();
     static void threadBuildSCHandler();
 
-public:
-    void* operator new(size_t size);
-    void operator delete(void* addr);
 
     friend class Riscv;
     friend class Kernel;
