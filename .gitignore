@@ -1,4 +1,4 @@
 /build
-/.idea
 kernel
 kernel.asm
+.idea/
