@@ -9,10 +9,12 @@
 #include "../h/riscv.hpp"
 #include "../h/Kernel.hpp"
 #include "../h/KSemaphore.hpp"
-
+#include "../h/MemAllocator.hpp"
 class TCB{
 
+
 public:
+    enum Privilege {SystemThread,UserThread};
 
     void* operator new(size_t size);
     void operator delete(void* addr);
@@ -25,7 +27,7 @@ public:
 
     ~TCB(){ if(stack != nullptr) MemoryAllocator::kfree(stack);}
 
-    TCB(Body body , void* args, uint64* stack = (uint64*)MemoryAllocator::kmalloc(DEFAULT_STACK_SIZE), uint64 timeSlice = DEFAULT_TIME_SLICE);
+    TCB(Body body , void* args,Privilege priv = UserThread,uint64* stack = (uint64*)MemoryAllocator::kmalloc(DEFAULT_STACK_SIZE), uint64 timeSlice = DEFAULT_TIME_SLICE);
 
     bool isFinished() const {return finished;}
 
@@ -36,9 +38,12 @@ public:
 
 private:
 
+
     static uint64 timeSliceCounter;
 
     static TCB* running;
+
+    Privilege privilege;
 
     struct Context{
         uint64 pc;

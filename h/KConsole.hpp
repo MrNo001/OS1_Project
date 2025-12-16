@@ -50,6 +50,8 @@ public:
     static uint64 console_status();
     static uint64 console_receive();
     static uint64 console_send(uint64 c);
+
+    friend class Kernel;
 };
 
 

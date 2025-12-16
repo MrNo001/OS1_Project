@@ -5,6 +5,7 @@
 #include "../h/riscv.hpp"
 #include "../h/TCB.hpp"
 #include "../h/print.hpp"
+#include "../h/KConsole.hpp"
 
 
 extern void userMain();
@@ -20,13 +21,14 @@ void Kernel::Init() {
     MemoryAllocator::Init();
 
     TCB* kernelThread = nullptr;
-    kernelThread = new TCB(nullptr, nullptr,0);
+    kernelThread = new TCB(nullptr,nullptr,TCB::SystemThread,0);
 
     TCB* userThread = nullptr;
-    userThread = new TCB(userMainWrapper, nullptr);
+    userThread = new TCB(userMainWrapper, nullptr,TCB::UserThread);
 
-    // TCB* consoleThread = nullptr;
-    // consoleThread = new TCB();
+    TCB* kernelThread = nullptr;
+    kernelThread = new TCB(KConsole::outputConsoleThread,nullptr,TCB::SystemThread);
+
 
     TCB::running = kernelThread;
 
@@ -40,7 +42,7 @@ void Kernel::Init() {
 
 
 int main(){
-    
+
     Kernel::Init();
     Kernel::stopEmulator();
 
