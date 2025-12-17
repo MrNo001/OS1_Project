@@ -6,7 +6,7 @@
 #include "../h/KSemaphore.hpp"
 #include "../h/KConsole.hpp"
 #include "../h/Scheduler.hpp"
-#include "Kernel.hpp"
+#include "../h/Kernel.hpp"
 
 
 

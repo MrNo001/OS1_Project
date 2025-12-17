@@ -2,7 +2,6 @@
 // Created by os on 1/3/25.
 //
 #include "../h/MemAllocator.hpp"
-#include "../h/print.hpp"
 #include "../h/riscv.hpp"
 
 #define SIZE_OF_MEM_HEADER sizeof(MemHeader)
@@ -14,9 +13,6 @@ MemoryAllocator::MemHeader* MemoryAllocator::free_list_head;
 
 MemoryAllocator::MemHeader* MemoryAllocator::alloc_list_head;
 
-MemoryAllocator::MemoryAllocator(){
-   MemoryAllocator::Init();
-}
 
 void MemoryAllocator::Init(){
     free_list_head=(MemHeader*)HEAP_START_ADDR;
@@ -37,8 +33,7 @@ void* MemoryAllocator::mem_alloc(size_t size){
         current = current->next;
     }
     if(current == nullptr){
-        printString("No more space for ");
-        printIntegerNewLine(size_required);
+
         return nullptr;
     }
 
@@ -71,10 +66,8 @@ void* MemoryAllocator::mem_alloc(size_t size){
 
     void* addr = (void*)((uint8*)current + sizeof(MemHeader));
     if(addr<=HEAP_START_ADDR || addr>=HEAP_END_ADDR){
-        printString("Illegal address");
-        printIntegerNewLine((uint64)addr);
+
     }
-    numOfAllocations++;
     return addr;
 
 }

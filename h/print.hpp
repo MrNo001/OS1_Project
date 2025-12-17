@@ -10,6 +10,6 @@ void println(uint64 integer);
 
 void print(char const* string);
 
-void print(char const)
+void print(char const);
 
 #endif 

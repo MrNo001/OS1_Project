@@ -5,16 +5,14 @@
 
 
 #include "../h/syscall_c.hpp"
-#include "../h/print.hpp"
-#include "../lib/console.h"
-#include  "../test/printing.hpp"
+
 
 //---------------MEMORY-------------------------
 
 void* mem_alloc(size_t size){
 
     uint64 op_code = 0x01;
-    __asm__ volatile("li a0, %[op_code]" : : [op_code] "r" (op_code));
+    __asm__ volatile("mv a0, %[op_code]" : : [op_code] "r" (op_code));
     __asm__ volatile("mv a1, %[size]" :  : [size]"r"((uint64)size));
 
 
@@ -48,6 +46,7 @@ size_t mem_get_free_space(){
 
     size_t result;
     __asm__ volatile("mv %[result],a1" : [result]"=r"(result));
+    return result;
 }
 
 size_t mem_get_largest_free_block(){
@@ -57,6 +56,7 @@ size_t mem_get_largest_free_block(){
 
     size_t result;
     __asm__ volatile("mv %[result],a1" : [result]"=r"(result));
+    return result;
 }
 
 //---------------THREAD-------------------------

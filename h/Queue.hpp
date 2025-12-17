@@ -4,9 +4,10 @@
 
 #ifndef OS_PROJECT_QUEUE_HPP
 #define OS_PROJECT_QUEUE_HPP
+
 #include "../lib/hw.h"
 #include "../h/MemAllocator.hpp"
-#include "../h/print.hpp"
+
 
 template <typename T>
 class Queue {
@@ -45,7 +46,6 @@ template <typename T>
 void Queue<T>::put(T elem) {
     Node* node = new Node;
     if(node == nullptr){
-        printString("cant allocate node\n");
         return;
     }
     node->next=nullptr;

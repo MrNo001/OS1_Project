@@ -20,6 +20,9 @@ private:
 
     };
 
+    static uint64 sizeAvailable;
+    static uint64 numOfAllocations;
+
     static MemHeader* free_list_head;
     static MemHeader* alloc_list_head;
 
@@ -33,6 +36,7 @@ private:
     static bool isValidMemSegment(MemHeader* mem);
     static void mergeFreeSegments(MemHeader* previous,MemHeader* current,MemHeader* next);
 
+public:
     static void* kmalloc(size_t size);
     static int kfree(void*);
 
@@ -44,7 +48,10 @@ private:
 
 
     friend class Riscv;
-
+    friend class TCB;
+    friend class KConsole;
+    friend class CharBuffer;
+	friend class Queue.hpp
 
 };
 

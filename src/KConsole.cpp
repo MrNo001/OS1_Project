@@ -2,12 +2,12 @@
 // Created by os on 7/3/25.
 //
 
-#include "../h/Riscv.hpp"
 #include "../h/CharBuffer.hpp"
 #include "../h/KConsole.hpp"
 #include "../lib/console.h"
 #include "../h/riscv.hpp"
 #include "../h/TCB.hpp"
+
 
 KSemaphore* KConsole::hasCharactersOutput = 0;
 KSemaphore* KConsole::hasCharactersInput = 0;
@@ -96,7 +96,7 @@ void KConsole::putcSCHandler() {
 
 //------------THREAD--------------------
 
-#include "syscall_c.hpp"
+#include "../h/syscall_c.hpp"
 void KConsole::outputConsoleThread(void* unused) {
      while(true) {
 

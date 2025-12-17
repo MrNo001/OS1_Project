@@ -49,13 +49,13 @@ public:
 
     static uint64 console_status();
     static uint64 console_receive();
-    static uint64 console_send(uint64 c);
+    static void console_send(uint64 c);
 
     friend class Kernel;
 };
 
 
-inline uint64 Kernel::console_status() {
+inline uint64 KConsole::console_status() {
     uint64 x = CONSOLE_STATUS;
     __asm__ volatile("mv a0, %0"::"r"(x));
     __asm__ volatile("lb a1, 0(a0)");
@@ -63,7 +63,8 @@ inline uint64 Kernel::console_status() {
     __asm__ volatile("mv %0, a1" :  "=r"(operation));
     return operation;
 }
-inline uint64 kernel::console_receive() {
+
+inline uint64 KConsole::console_receive() {
     uint64 x = CONSOLE_TX_DATA;
     __asm__ volatile("mv a0, %0"::"r"(x));
     __asm__ volatile("lb a1,0(a0)");
@@ -71,7 +72,8 @@ inline uint64 kernel::console_receive() {
     __asm__ volatile("mv %0, a1" :  "=r"(c));
     return c;
 }
-inline void Kernel::console_send(uint64 c) {
+
+inline void KConsole::console_send(uint64 c) {
     uint64 x = CONSOLE_RX_DATA;
     __asm__ volatile("mv a0, %0"::"r"(x));
     __asm__ volatile("mv a1, %0" :  :"r"((uint64)c));
