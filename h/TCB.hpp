@@ -43,8 +43,7 @@ private:
 
     static TCB* running;
 
-    Privilege privilege;
-
+   
     struct Context{
         uint64 pc;
         uint64 sp;
@@ -52,6 +51,8 @@ private:
 
     Body body;
     void* args;
+    Privilege privilege;
+
     uint64* stack;
     Context context;
     uint64 timeSlice;

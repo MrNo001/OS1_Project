@@ -51,7 +51,7 @@ public:
     friend class TCB;
     friend class KConsole;
     friend class CharBuffer;
-	friend class Queue.hpp
+    friend class Kernel;
 
 };
 

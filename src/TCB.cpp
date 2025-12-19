@@ -16,7 +16,7 @@ uint64  TCB::timeSliceCounter = 0;
 int TCB::counter_id = 0;
 
 
-TCB::TCB(Body body, void* args, uint64* stack, uint64 timeSlice): body(body), args(args),
+TCB::TCB(Body body, void* args, Privilege priv, uint64* stack, uint64 timeSlice): body(body), args(args), privilege(priv),
                     stack(stack),
                     context({(uint64)&ThreadWrapper,
                             stack != nullptr ? (uint64) ((uint8*)stack+ DEFAULT_STACK_SIZE): 0}),
@@ -74,7 +74,7 @@ void TCB::threadCreateSCHandler() {
         return;
     }
 
-    TCB* newTCB = new TCB((void (*)(void *)) start_routine, (void *) args,thread_stack, DEFAULT_TIME_SLICE);
+    TCB* newTCB = new TCB((void (*)(void *)) start_routine, (void *) args,TCB::UserThread,thread_stack, DEFAULT_TIME_SLICE);
     newTCB->start();
 
     (*threadHandle) = newTCB;
@@ -134,7 +134,7 @@ void TCB::threadBuildSCHandler() {
         return;
     }
 
-    TCB* newTCB = new TCB((void (*)(void *)) start_routine, (void *) args,thread_stack, DEFAULT_TIME_SLICE);
+    TCB* newTCB = new TCB((void (*)(void *)) start_routine, (void *) args,TCB::UserThread,thread_stack, DEFAULT_TIME_SLICE);
 
     (*threadHandle) = newTCB;
     Riscv::w_a0( 0);

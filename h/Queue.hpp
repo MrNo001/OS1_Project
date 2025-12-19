@@ -58,7 +58,7 @@ void Queue<T>::put(T elem) {
 
 template <typename T>
 T Queue<T>::pop(){
-    if(head == nullptr) return nullptr;
+    if(head == nullptr) return T();
     Node* to_pop = head;
     head = head->next;
     T ret_value = to_pop->data;
@@ -91,7 +91,7 @@ T Queue<T>::peek() {
         return head->data;
     }
     else{
-        return nullptr;
+        return T();
     }
 }
 

@@ -22,13 +22,15 @@ void Kernel::Init() {
 
     TCB* kernelThread = nullptr;
     kernelThread = new TCB(nullptr,nullptr,TCB::SystemThread,0);
+    kernelThread->start();
 
     TCB* userThread = nullptr;
     userThread = new TCB(userMainWrapper, nullptr,TCB::UserThread);
+    userThread->start();
 
-    TCB* kernelThread = nullptr;
-    kernelThread = new TCB(KConsole::outputConsoleThread,nullptr,TCB::SystemThread);
-
+    TCB* consoleThread = nullptr;
+    consoleThread = new TCB(KConsole::outputConsoleThread,nullptr,TCB::SystemThread);
+    consoleThread->start();
 
     TCB::running = kernelThread;
 

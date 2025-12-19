@@ -8,8 +8,9 @@
 
 class Kernel{
 
-private:
+public:
     static void Init();
+private:
     static void userMainWrapper(void* args);
 
 public:
