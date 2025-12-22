@@ -12,7 +12,6 @@ public:
 
     static uint64 system_time;
 
-    static void enterSystemMode();
     static void enableInterrupts();
     static void disableInterrupts();
 

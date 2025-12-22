@@ -19,7 +19,8 @@ void Kernel::Init() {
     Riscv::w_stvec((uint64) &Riscv::supervisorTrap);
 
     MemoryAllocator::Init();
-
+    KConsole::initialize();
+    
     TCB* kernelThread = nullptr;
     kernelThread = new TCB(nullptr,nullptr,TCB::SystemThread,0);
     kernelThread->start();

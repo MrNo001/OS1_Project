@@ -79,8 +79,8 @@ private:
     static void threadSleepSCHandler();
     static void threadDeleteSCHandler();
     static void threadBuildSCHandler();
-
-
+    static void threadStartSCHandler();
+    
     friend class Riscv;
     friend class Kernel;
     friend class KSemaphore;

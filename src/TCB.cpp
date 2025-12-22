@@ -140,6 +140,14 @@ void TCB::threadBuildSCHandler() {
     Riscv::w_a0( 0);
 }
 
+void TCB::threadStartSCHandler() {
+    TCB* handle;
+    __asm__ volatile("mv %0, a1" : "=r"(handle));
+    handle->start();
+    Riscv::w_a0(0);
+    return;
+}
+
 void* TCB::operator new(size_t size) {
     return MemoryAllocator::kmalloc(size);
 }
@@ -147,3 +155,5 @@ void* TCB::operator new(size_t size) {
 void TCB::operator delete(void *addr) {
     MemoryAllocator::kfree(addr);
 }
+
+

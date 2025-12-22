@@ -64,11 +64,6 @@ void Riscv::popSppSpie() {
     __asm__ volatile("sret");
 }
 
-void Riscv::enterSystemMode(){
-    __asm__ volatile("csrw sepc, ra");
-    __asm__ volatile("sret");
-}
-
 
 void Riscv::handleSupervisorTrap() {
 
@@ -119,7 +114,8 @@ void Riscv::handleSupervisorTrap() {
             case 0x13: TCB::threadDispatchSCHandler(); break;
             case 0x14: TCB::threadDeleteSCHandler(); break;
             case 0x15: TCB::threadBuildSCHandler(); break;
-
+            case 0x16: TCB::threadStartSCHandler(); break;
+            
             case 0x21:KSemaphore::semOpenSCHandler(); break;
             case 0x22:KSemaphore::semCloseSCHandler(); break;
             case 0x23:KSemaphore::semWaitSCHandler(); break;
