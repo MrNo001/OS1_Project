@@ -112,7 +112,3 @@ void KConsole::outputConsoleThread(void* unused) {
     }
 }
 
-
-
-
-

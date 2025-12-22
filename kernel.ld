@@ -10,7 +10,8 @@ SECTIONS
   . = 0x80000000;
 
   .text : {
-    *(.entry_os) . = ALIGN(0x1000);
+    *(.entry_os)
+    . = ALIGN(0x1000);
     *(.text .text.*)
     . = ALIGN(0x1000);
     PROVIDE(etext = .);
@@ -24,6 +25,9 @@ SECTIONS
   }
 
   .data : {
+    /* RISC-V small data uses gp-relative addressing; define it near .sdata. */
+    . = ALIGN(16);
+    PROVIDE(__global_pointer$ = . + 0x800);
     . = ALIGN(16);
     *(.sdata .sdata.*) /* do not need to distinguish this from .data */
     . = ALIGN(16);

@@ -8,8 +8,8 @@ KERNEL_IMG = kernel
 KERNEL_ASM = kernel.asm
 
 LIBS = \
+  ${DIR_LIBS}/console.lib \
   ${DIR_LIBS}/hw.lib \
-  ${DIR_LIBS}/console.lib
 # ${DIR_LIBS}/mem.lib \
 
 
@@ -70,8 +70,9 @@ CXXFLAGS += ${DEBUG_FLAG}
 CXXFLAGS += -MMD -MP -MF"${@:%.o=%.d}"
 
 LDSCRIPT = kernel.ld
-LDFLAGS  = -z max-page-size=4096 --script ${LDSCRIPT} --no-relax --no-warn-rwx-segments
-LDLIBS   = --library-path . $(patsubst %,--library=:%,${LIBS})
+LDFLAGS  = --script ${LDSCRIPT} --no-relax --no-warn-rwx-segments
+LDPATHS  = --library-path .
+LDLIBS   = $(patsubst %,--library=:%,${LIBS})
 
 OBJECTS =
 
@@ -90,7 +91,7 @@ vpath %.cpp $(sort $(dir ${SOURCES_CPP}))
 all: ${KERNEL_IMG}
 
 ${KERNEL_IMG}: ${LIBS} ${OBJECTS} ${LDSCRIPT} | ${DIR_BUILD}
-	${LD} ${LDFLAGS} -o ${@} ${OBJECTS} ${LDLIBS} ${LDLIBS}
+	${LD} ${LDFLAGS} -o ${@} ${OBJECTS} ${LDPATHS} --start-group ${LDLIBS} --end-group
 	${OBJDUMP} --source ${KERNEL_IMG} > ${KERNEL_ASM}
 
 ${DIR_BUILD}/%.o: %.cpp Makefile | ${DIR_BUILD}

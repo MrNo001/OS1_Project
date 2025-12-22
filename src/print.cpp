@@ -3,7 +3,7 @@
 //
 
 #include "../h/print.hpp"
-#include "../lib/console.h"
+#include "../h/syscall_c.hpp"
 #include "../h/riscv.hpp"
 
 
@@ -15,10 +15,10 @@ void println(char const *string)
     Riscv::mc_sstatus(Riscv::SSTATUS_SIE);
     while (*string != '\0')
     {
-        __putc(*string);
+        putc(*string);
         string++;
     }
-    __putc('\n');
+    putc('\n');
     Riscv::ms_sstatus(sstatus & Riscv::SSTATUS_SIE ? Riscv::SSTATUS_SIE : 0);
 }
 
@@ -28,7 +28,7 @@ void print(char const *string)
     Riscv::mc_sstatus(Riscv::SSTATUS_SIE);
     while (*string != '\0')
     {
-        __putc(*string);
+        putc(*string);
         string++;
     }
     Riscv::ms_sstatus(sstatus & Riscv::SSTATUS_SIE ? Riscv::SSTATUS_SIE : 0);
@@ -61,11 +61,38 @@ void print(uint64 integer)
     if (neg)
         buf[i++] = '-';
 
-    while (--i >= 0) { __putc(buf[i]); }
+    while (--i >= 0) { putc(buf[i]); }
     Riscv::ms_sstatus(sstatus & Riscv::SSTATUS_SIE ? Riscv::SSTATUS_SIE : 0);
 }
 
 void println(uint64 integer){
     print(integer);
+    putc('\n');
+}
+
+
+void debug_print(const char* string) {
+    while (*string != '\0') {
+        __putc(*string);
+        string++;
+    }
+}
+
+void debug_println(const char* string) {
+    debug_print(string);
+    __putc('\n');
+}
+
+void debug_print(int x,int base) {
+    char digits[] = "0123456789ABCDEF";
+    char buf[16];
+    int n = 0;
+    do buf[n++] = digits[x % base];
+    while ((x /= base) != 0);
+    while (n--) __putc(buf[n]);
+}
+
+void debug_println(int x,int base) {
+    debug_print(x,base);
     __putc('\n');
 }
