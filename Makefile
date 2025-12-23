@@ -8,10 +8,9 @@ KERNEL_IMG = kernel
 KERNEL_ASM = kernel.asm
 
 LIBS = \
-  ${DIR_LIBS}/console.lib \
   ${DIR_LIBS}/hw.lib \
-# ${DIR_LIBS}/mem.lib \
-
+  ${DIR_LIBS}/mem.lib \
+  ${DIR_LIBS}/console.lib
 
 # riscv64-unknown-elf- or riscv64-linux-gnu-
 # perhaps in /opt/riscv/bin
@@ -19,11 +18,11 @@ LIBS = \
 
 # Try to infer the correct TOOLPREFIX if not set
 ifndef TOOLPREFIX
-TOOLPREFIX := $(shell if which riscv64-unknown-elf-gcc >/dev/null 2>&1; \
+TOOLPREFIX := $(shell if riscv64-unknown-elf-objdump -i 2>&1 | grep 'elf64-big' >/dev/null 2>&1; \
 	then echo 'riscv64-unknown-elf-'; \
-	elif which riscv64-linux-gnu-gcc >/dev/null 2>&1; \
+	elif riscv64-linux-gnu-objdump -i 2>&1 | grep 'elf64-big' >/dev/null 2>&1; \
 	then echo 'riscv64-linux-gnu-'; \
-	elif which riscv64-unknown-linux-gnu-gcc >/dev/null 2>&1; \
+	elif riscv64-unknown-linux-gnu-objdump -i 2>&1 | grep 'elf64-big' >/dev/null 2>&1; \
 	then echo 'riscv64-unknown-linux-gnu-'; \
 	else echo "***" 1>&2; \
 	echo "*** Error: Couldn't find a riscv64 version of GCC/binutils." 1>&2; \
@@ -40,11 +39,11 @@ LD      = ${TOOLPREFIX}ld
 OBJCOPY = ${TOOLPREFIX}objcopy
 OBJDUMP = ${TOOLPREFIX}objdump
 
-ASFLAGS = -g -march=rv64ima_zicsr -mabi=lp64
+ASFLAGS = -ggdb -march=rv64ima -mabi=lp64
 
 CFLAGS  = -Wall -Werror -Og -ggdb
 CFLAGS += -nostdlib
-CFLAGS += -march=rv64ima_zicsr -mabi=lp64 -mcmodel=medany -mno-relax
+CFLAGS += -march=rv64ima -mabi=lp64 -mcmodel=medany -mno-relax
 CFLAGS += -fno-omit-frame-pointer -ffreestanding -fno-common
 CFLAGS += $(shell ${CC} -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 CFLAGS += ${DEBUG_FLAG}
@@ -61,7 +60,7 @@ endif
 
 CXXFLAGS  = -Wall -Werror -Og -ggdb
 CXXFLAGS += -nostdlib -std=c++11
-CXXFLAGS += -march=rv64ima_zicsr -mabi=lp64 -mcmodel=medany -mno-relax
+CXXFLAGS += -march=rv64ima -mabi=lp64 -mcmodel=medany -mno-relax
 CXXFLAGS += -fno-omit-frame-pointer -ffreestanding -fno-common
 CXXFLAGS += -fno-rtti -fno-threadsafe-statics
 #CXXFLAGS += -I./${DIR_LIBS} -I./${DIR_INC}
@@ -70,9 +69,8 @@ CXXFLAGS += ${DEBUG_FLAG}
 CXXFLAGS += -MMD -MP -MF"${@:%.o=%.d}"
 
 LDSCRIPT = kernel.ld
-LDFLAGS  = --script ${LDSCRIPT} --no-relax --no-warn-rwx-segments
-LDPATHS  = --library-path .
-LDLIBS   = $(patsubst %,--library=:%,${LIBS})
+LDFLAGS  = -z max-page-size=4096 --script ${LDSCRIPT}
+LDLIBS   = --library-path . $(patsubst %,--library=:%,${LIBS})
 
 OBJECTS =
 
@@ -91,7 +89,7 @@ vpath %.cpp $(sort $(dir ${SOURCES_CPP}))
 all: ${KERNEL_IMG}
 
 ${KERNEL_IMG}: ${LIBS} ${OBJECTS} ${LDSCRIPT} | ${DIR_BUILD}
-	${LD} ${LDFLAGS} -o ${@} ${OBJECTS} ${LDPATHS} --start-group ${LDLIBS} --end-group
+	${LD} ${LDFLAGS} -o ${@} ${OBJECTS} ${LDLIBS} ${LDLIBS}
 	${OBJDUMP} --source ${KERNEL_IMG} > ${KERNEL_ASM}
 
 ${DIR_BUILD}/%.o: %.cpp Makefile | ${DIR_BUILD}
@@ -102,13 +100,9 @@ ${DIR_BUILD}/%.o: %.c Makefile | ${DIR_BUILD}
 	@mkdir -p $(dir ${@})
 	${CC} -c ${CFLAGS} -Wa,-a,-ad,-alms=${DIR_BUILD}/${<:.c=.lst} -o ${@} ${<}
 
-${DIR_BUILD}/%.o: %.S Makefile | ${DIR_BUILD}
-	@mkdir -p $(dir ${@})
-	${CC} ${CFLAGS} -c -o ${@} ${<}
-
 ${DIR_BUILD}/%.o: %.s Makefile | ${DIR_BUILD}
 	@mkdir -p $(dir ${@})
-	${AS} ${ASFLAGS} -o ${@} ${<}
+	${AS} -c ${ASFLAGS} -o ${@} ${<}
 
 ${DIR_BUILD}:
 	mkdir ${@}

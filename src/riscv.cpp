@@ -10,41 +10,6 @@
 
 
 
-
-char *int_to_hex(int num) {
-    static char buffer[sizeof(int) * 2 + 1]; // Buffer to hold hex string
-    const char hex_chars[] = "0123456789ABCDEF"; // Hex characters
-    unsigned int n = (unsigned int)num; // Cast to unsigned to handle negatives
-
-    if (n == 0) {
-        buffer[0] = '0';
-        buffer[1] = '\0';
-        return buffer;
-    }
-
-    // Count the number of hex digits
-    int digits = 0;
-    unsigned int temp = n;
-    while (temp != 0) {
-        digits++;
-        temp >>= 4;
-    }
-
-    // Null-terminate the string
-    buffer[digits] = '\0';
-
-    // Fill the buffer from most significant digit to least
-    for (int i = 0; i < digits; i++) {
-        int shift = (digits - 1 - i) * 4;
-        unsigned int nibble = (n >> shift) & 0xF;
-        buffer[i] = hex_chars[nibble];
-    }
-
-    return buffer;
-}
-
-
-
 uint64 Riscv::system_time = 0;
 
 void Riscv::w_a0 (uint64 value) {
@@ -54,7 +19,7 @@ void Riscv::w_a0 (uint64 value) {
 
 uint64 Riscv::r_a_stack(int index){
     uint64 addr = TCB::running->saved_sp + 80 + 8*index;
-    uint64 result;
+    uint64 volatile result;
     __asm__ volatile("ld %0, 0(%1)" : "=r"(result) : "r"(addr));
     return result;
 };
@@ -96,11 +61,8 @@ void Riscv::handleSupervisorTrap() {
     }
     if ((scause == ECALL_SYSTEM_CAUSE) || (scause == ECALL_USER_CAUSE)) {
 
-        volatile uint64 op_code;
-        __asm__ volatile("mv %0,a0":"=r"(op_code));
-
-        volatile uint64 sepc;
-        sepc=r_sepc();
+        volatile uint64 op_code = r_a_stack(0);
+        volatile uint64 sepc = r_sepc();
         volatile uint64 sstatus = r_sstatus();
 
         switch (op_code) {
@@ -132,14 +94,13 @@ void Riscv::handleSupervisorTrap() {
         w_sepc(sepc);
         w_sstatus(sstatus);
 
-
         return;
     }
 
 
-    print("Unexpected: "); println(r_scause());
-    println(int_to_hex(r_sepc()));
-    println(r_sstatus());
+    debug_print("Unexpected: "); debug_println(r_scause());
+    debug_println(r_sepc(),16);
+    debug_println(r_sstatus());
 
     Kernel::stopEmulator();
 
