@@ -90,8 +90,28 @@ void KConsole::getOutputBufferSCHandler() {
 
 void KConsole::putcSCHandler() {
 
+    
+
     char c = (char) Riscv::r_a_stack(1);
+    __putc(c);
+    return;
     output->put(c);
+}
+
+void KConsole::debugGetcSCHandler() {
+    uint64 oldStack=TCB::running->saved_sp;
+    uint64 result = (uint64) __getc();
+    TCB::running->saved_sp = oldStack;
+    Riscv::w_a0(result);
+    return;
+}
+
+void KConsole::debugPutcSCHandler() {
+    uint64 c = Riscv::r_a_stack(1);
+    uint64 oldStack=TCB::running->saved_sp;
+    __putc((char)c);
+    TCB::running->saved_sp = oldStack;
+    return;
 }
 
 //------------THREAD--------------------

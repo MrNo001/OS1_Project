@@ -10,15 +10,17 @@
 
 
 
+#include "../test/ConsumerProducer_C_API_test.hpp"
 
 
 
+// void userMain()
+// {
+//     putc('A');
 
-void userMain()
-{
-
+//     producerConsumer_C_API();
     
-    return ;
-}
+//     return ;
+// }
 
 

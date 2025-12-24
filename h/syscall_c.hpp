@@ -1,6 +1,5 @@
-
-#ifndef OS_PROJECT_SYSCALL_C_HPP
-#define OS_PROJECT_SYSCALL_C_HPP
+#ifndef OS_PROJECT_SYSCALL_C_H
+#define OS_PROJECT_SYSCALL_C_H
 
 #include "../lib/hw.h"
 #include "../lib/console.h"
@@ -44,4 +43,7 @@ void putc(char);
 
 char get_buffer_output();
 
-#endif //OS_PROJECT_SYSCALL_C_HPP
+char debug_getc();
+void debug_putc(char);
+
+#endif //OS_PROJECT_SYSCALL_C_H

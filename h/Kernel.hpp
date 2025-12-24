@@ -7,6 +7,7 @@
 
 
 #include "../lib/hw.h"
+#include "../lib/console.h"
 
 class Kernel{
 
@@ -44,6 +45,7 @@ inline uint64 Kernel::syscall(uint64 op,uint64 arg1,uint64 arg2, uint64 arg3) {
           [arg3] "r"(arg3)
         : "a0", "a1", "a2", "a3", "memory"
     );
+
     return ret;
 }
 

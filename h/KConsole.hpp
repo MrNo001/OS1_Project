@@ -39,6 +39,8 @@ private:
 public:
     static void getcSCHandler();
     static void putcSCHandler();
+    static void debugGetcSCHandler();
+    static void debugPutcSCHandler();
 
     static void getOutputBufferSCHandler();
 

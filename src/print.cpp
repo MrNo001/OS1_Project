@@ -73,14 +73,14 @@ void println(uint64 integer){
 
 void debug_print(const char* string) {
     while (*string != '\0') {
-        __putc(*string);
+        debug_putc(*string);
         string++;
     }
 }
 
 void debug_println(const char* string) {
     debug_print(string);
-    __putc('\n');
+    debug_putc('\n');
 }
 
 void debug_print(int x,int base) {
@@ -89,10 +89,10 @@ void debug_print(int x,int base) {
     int n = 0;
     do buf[n++] = digits[x % base];
     while ((x /= base) != 0);
-    while (n--) __putc(buf[n]);
+    while (n--) debug_putc(buf[n]);
 }
 
 void debug_println(int x,int base) {
     debug_print(x,base);
-    __putc('\n');
+    debug_putc('\n');
 }

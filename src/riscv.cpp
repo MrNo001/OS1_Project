@@ -60,7 +60,15 @@ void Riscv::handleSupervisorTrap() {
         return;
     }
     if ((scause == ECALL_SYSTEM_CAUSE) || (scause == ECALL_USER_CAUSE)) {
-
+        
+        if (TCB::running == nullptr) {
+            // Can't handle syscalls without a running thread
+            // This should not happen if TCB::running is set before first syscall
+            Kernel::stopEmulator();
+            return;
+        }
+        
+        TCB::running->saved_sp = r_sscratch();
         volatile uint64 op_code = r_a_stack(0);
         volatile uint64 sepc = r_sepc();
         volatile uint64 sstatus = r_sstatus();
@@ -87,7 +95,10 @@ void Riscv::handleSupervisorTrap() {
 
             case 0x41:KConsole::getcSCHandler(); break;
             case 0x42:KConsole::putcSCHandler(); break;
-            case 0x43:KConsole::getOutputBufferSCHandler();
+            case 0x43:KConsole::getOutputBufferSCHandler(); break;
+
+            case 0x44:KConsole::debugGetcSCHandler(); break;
+            case 0x45:KConsole::debugPutcSCHandler(); break;
 
         }
         sepc = sepc + 4;

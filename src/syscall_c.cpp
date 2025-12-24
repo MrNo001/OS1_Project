@@ -79,7 +79,7 @@ int time_sleep (time_t time){
 //--------------CONSOLE------------------------------
 
 char getc(){
-    return Kernel::syscall(0x41);
+    return Kernel::syscall(0x44);
 }
 
 void putc(char c){
@@ -89,3 +89,12 @@ void putc(char c){
 char get_buffer_output(){
     return (char) Kernel::syscall(0x43);
 }
+
+char debug_getc(){
+    return Kernel::syscall(0x44);
+}
+
+void debug_putc(char c){
+    Kernel::syscall(0x45, (uint64)c);
+}
+
