@@ -65,7 +65,6 @@ void KConsole::getCharactersFromConsole() {
     bool readable = KConsole::console_status() & CONSOLE_RX_STATUS_BIT;
     if (readable) {
         char c = KConsole::console_receive();
-        // if (pendingGetc > 0)
         input->put(c);
     }
 }
@@ -74,8 +73,7 @@ void KConsole::getCharactersFromConsole() {
 void KConsole::getcSCHandler() {
 
     char c = input->get();
-    if (c != 27) // ESC = 27
-        output->put(c);
+    output->put(c);
     if (c == 13) // CR = 13, LF = 10
         output->put(10);
     Riscv::w_a0((uint64)c);
@@ -90,12 +88,11 @@ void KConsole::getOutputBufferSCHandler() {
 
 void KConsole::putcSCHandler() {
 
-    
-
     char c = (char) Riscv::r_a_stack(1);
-    __putc(c);
-    return;
     output->put(c);
+    //__putc(c);
+    return;
+
 }
 
 void KConsole::debugGetcSCHandler() {

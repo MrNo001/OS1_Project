@@ -38,11 +38,12 @@ void Kernel::Init() {
     userThread = new TCB(userMainWrapper, nullptr,TCB::UserThread);
     userThread->start();
 
-    // TCB* consoleThread = nullptr;
-    // consoleThread = new TCB(KConsole::outputConsoleThread,nullptr,TCB::SystemThread);
-    // consoleThread->start();
-
     Riscv::enableInterrupts();
+
+    TCB* consoleThread = nullptr;
+    consoleThread = new TCB(KConsole::outputConsoleThread,nullptr,TCB::SystemThread);
+    consoleThread->start();
+
     debug_println("Kernel started...");
 
     while(!userThread->finished){

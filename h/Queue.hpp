@@ -19,7 +19,7 @@ public:
     T pop();
     bool pop(T& out);
     T peek();
-    bool isEmpty();
+    bool isEmpty() const;
 
     struct Node{
         Node* next;
@@ -81,7 +81,7 @@ bool Queue<T>::pop(T& out){
 }
 
 template <typename T>
-bool Queue<T>::isEmpty() {
+bool Queue<T>::isEmpty() const {
     return (head == nullptr);
 }
 

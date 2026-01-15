@@ -84,6 +84,8 @@ public:
 private:
 
     static void handleSupervisorTrap();
+    static void consoleHandler();
+    static void debugConsoleHandler();
 
 };
 

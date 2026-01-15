@@ -29,6 +29,20 @@ void Riscv::popSppSpie() {
     __asm__ volatile("sret");
 }
 
+inline void Riscv::debugConsoleHandler() {
+    volatile uint64  sepc = r_sepc();
+    volatile uint64 sstatus = r_sstatus();
+    console_handler();
+    w_sstatus(sstatus);
+    w_sepc(sepc);
+    return;
+}
+
+inline void Riscv::consoleHandler() {
+    KConsole::getCharactersFromConsole();
+    plic_complete(plic_claim());
+    return;
+}
 
 void Riscv::handleSupervisorTrap() {
 
@@ -36,11 +50,8 @@ void Riscv::handleSupervisorTrap() {
     volatile uint64 scause = r_scause();
 
     if(scause == CONSOLE_HANDLER_CAUSE) {
-        volatile uint64  sepc = r_sepc();
-        volatile uint64 sstatus = r_sstatus();
-        console_handler();
-        w_sstatus(sstatus);
-        w_sepc(sepc);
+        //Riscv::debugConsoleHandler();
+        Riscv::consoleHandler();
         return;
     }
     if(scause == TIMER_CAUSE){

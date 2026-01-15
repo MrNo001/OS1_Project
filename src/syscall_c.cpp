@@ -79,7 +79,7 @@ int time_sleep (time_t time){
 //--------------CONSOLE------------------------------
 
 char getc(){
-    return Kernel::syscall(0x44);
+    return Kernel::syscall(0x41);
 }
 
 void putc(char c){

@@ -54,6 +54,7 @@ public:
     static void console_send(uint64 c);
 
     friend class Kernel;
+    friend class Riscv;
 };
 
 
