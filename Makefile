@@ -9,7 +9,7 @@ KERNEL_ASM = kernel.asm
 
 LIBS = \
   ${DIR_LIBS}/hw.lib \
-  ${DIR_LIBS}/console.lib \
+ ${DIR_LIBS}/console.lib \
 # ${DIR_LIBS}/mem.lib \
 
 
@@ -101,9 +101,9 @@ ${DIR_BUILD}/%.o: %.c Makefile | ${DIR_BUILD}
 	@mkdir -p $(dir ${@})
 	${CC} -c ${CFLAGS} -Wa,-a,-ad,-alms=${DIR_BUILD}/${<:.c=.lst} -o ${@} ${<}
 
-# ${DIR_BUILD}/%.o: %.S Makefile | ${DIR_BUILD}
-# 	@mkdir -p $(dir ${@})
-# 	${CC} -c ${CFLAGS} -x assembler-with-cpp -Wa,-a,-ad,-alms=${DIR_BUILD}/${<:.S=.lst} -o ${@} ${<}
+${DIR_BUILD}/%.o: %.S Makefile | ${DIR_BUILD}
+	@mkdir -p $(dir ${@})
+	${CC} -c ${CFLAGS} -x assembler-with-cpp -Wa,-a,-ad,-alms=${DIR_BUILD}/${<:.S=.lst} -o ${@} ${<}
 
 ${DIR_BUILD}/%.o: %.s Makefile | ${DIR_BUILD}
 	@mkdir -p $(dir ${@})
