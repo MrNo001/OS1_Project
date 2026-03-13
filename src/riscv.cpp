@@ -120,9 +120,10 @@ void Riscv::handleSupervisorTrap() {
     }
 
 
-    debug_print("Unexpected: "); debug_println(r_scause());
-    debug_println(r_sepc(),16);
-    debug_println(r_sstatus());
+    debug_print("Unexpected: "); debug_print(r_scause()); debug_print("\n");
+    debug_print("sepc: "); debug_print(r_sepc()); debug_print("\n");
+    debug_print("sstatus: "); debug_print(r_sstatus()); debug_print("\n");
+
 
     Kernel::stopEmulator();
 
