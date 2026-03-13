@@ -7,6 +7,7 @@
 #include "../h/KConsole.hpp"
 #include "../h/Scheduler.hpp"
 #include "../h/Kernel.hpp"
+#include "../h/syscall_c.hpp"
 
 
 
@@ -108,8 +109,8 @@ void Riscv::handleSupervisorTrap() {
             case 0x42:KConsole::putcSCHandler(); break;
             case 0x43:KConsole::getOutputBufferSCHandler(); break;
 
-            case 0x44:KConsole::debugGetcSCHandler(); break;
-            case 0x45:KConsole::debugPutcSCHandler(); break;
+            // case 0x44:KConsole::debugGetcSCHandler(); break;
+            // case 0x45:KConsole::debugPutcSCHandler(); break;
 
         }
         sepc = sepc + 4;
@@ -120,10 +121,15 @@ void Riscv::handleSupervisorTrap() {
     }
 
 
-    debug_print("Unexpected: "); debug_print(r_scause()); debug_print("\n");
-    debug_print("sepc: "); debug_print(r_sepc()); debug_print("\n");
-    debug_print("sstatus: "); debug_print(r_sstatus()); debug_print("\n");
+    // debug_print("Unexpected: "); debug_print(r_scause()); debug_print("\n");
+    // debug_print("sepc: "); debug_print(r_sepc()); debug_print("\n");
+    // debug_print("sstatus: "); debug_print(r_sstatus()); debug_print("\n");
 
+    KConsole::kprint("Unexpected: "); KConsole::kprint(r_scause()); KConsole::kprint("\n");
+    KConsole::kprint("sepc: "); KConsole::kprint(r_sepc()); KConsole::kprint("\n");
+    KConsole::kprint("sstatus: "); KConsole::kprint(r_sstatus()); KConsole::kprint("\n");
+
+    time_sleep(time_t(100));
 
     Kernel::stopEmulator();
 

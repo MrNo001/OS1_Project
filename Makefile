@@ -9,7 +9,7 @@ KERNEL_ASM = kernel.asm
 
 LIBS = \
   ${DIR_LIBS}/hw.lib \
- ${DIR_LIBS}/console.lib \
+# ${DIR_LIBS}/console.lib \
 # ${DIR_LIBS}/mem.lib \
 
 

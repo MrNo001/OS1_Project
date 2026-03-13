@@ -38,14 +38,24 @@ void KConsole::kprint(const char* string) {
 
 void KConsole::kprint(int x, int base) {
     bool neg = false;
-    if (x < 0) neg = true, x = -x;
+    if (x < 0) {
+        neg = true;
+         x = -x;
+        }
     char digits[] = "0123456789ABCDEF";
     char buf[16];
     int n = 0;
-    do buf[n++] = digits[x % base];
-    while ((x /= base) != 0);
+
+    do {
+        buf[n++] = digits[x % base];
+        x /= base;
+    } while (x != 0);
+
     if (neg) buf[n++] = '-';
-    while (n--) output->put(buf[n]);
+
+    while (n > 0) {
+        output->put(buf[--n]);
+    }
 }
 
 
@@ -90,26 +100,25 @@ void KConsole::putcSCHandler() {
 
     char c = (char) Riscv::r_a_stack(1);
     output->put(c);
-    //__putc(c);
     return;
 
 }
 
-void KConsole::debugGetcSCHandler() {
-    uint64 oldStack=TCB::running->saved_sp;
-    uint64 result = (uint64) __getc();
-    TCB::running->saved_sp = oldStack;
-    Riscv::w_a0(result);
-    return;
-}
+// void KConsole::debugGetcSCHandler() {
+//     uint64 oldStack=TCB::running->saved_sp;
+//     uint64 result = (uint64) __getc();
+//     TCB::running->saved_sp = oldStack;
+//     Riscv::w_a0(result);
+//     return;
+// }
 
-void KConsole::debugPutcSCHandler() {
-    uint64 c = Riscv::r_a_stack(1);
-    uint64 oldStack=TCB::running->saved_sp;
-    __putc((char)c);
-    TCB::running->saved_sp = oldStack;
-    return;
-}
+// void KConsole::debugPutcSCHandler() {
+//     uint64 c = Riscv::r_a_stack(1);
+//     uint64 oldStack=TCB::running->saved_sp;
+//     __putc((char)c);
+//     TCB::running->saved_sp = oldStack;
+//     return;
+// }
 
 //------------THREAD--------------------
 
