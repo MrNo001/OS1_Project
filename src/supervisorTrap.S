@@ -20,6 +20,3 @@ _ZN5Riscv14supervisorTrapEv:
     addi sp, sp, 256
 
     sret
-
-
-//ecall izuzetak ili spoljasnji prekid...

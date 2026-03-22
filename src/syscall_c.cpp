@@ -1,9 +1,3 @@
-//
-// Created by os on 1/7/25.
-//
-
-
-
 #include "../h/syscall_c.hpp"
 #include "../h/Kernel.hpp"
 

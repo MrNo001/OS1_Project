@@ -51,7 +51,6 @@ void Riscv::handleSupervisorTrap() {
     volatile uint64 scause = r_scause();
 
     if(scause == CONSOLE_HANDLER_CAUSE) {
-        //Riscv::debugConsoleHandler();
         Riscv::consoleHandler();
         return;
     }
@@ -109,9 +108,6 @@ void Riscv::handleSupervisorTrap() {
             case 0x42:KConsole::putcSCHandler(); break;
             case 0x43:KConsole::getOutputBufferSCHandler(); break;
 
-            // case 0x44:KConsole::debugGetcSCHandler(); break;
-            // case 0x45:KConsole::debugPutcSCHandler(); break;
-
         }
         sepc = sepc + 4;
         w_sepc(sepc);
@@ -119,11 +115,6 @@ void Riscv::handleSupervisorTrap() {
 
         return;
     }
-
-
-    // debug_print("Unexpected: "); debug_print(r_scause()); debug_print("\n");
-    // debug_print("sepc: "); debug_print(r_sepc()); debug_print("\n");
-    // debug_print("sstatus: "); debug_print(r_sstatus()); debug_print("\n");
 
     KConsole::kprint("Unexpected: "); KConsole::kprint(r_scause()); KConsole::kprint("\n");
     KConsole::kprint("sepc: "); KConsole::kprint(r_sepc()); KConsole::kprint("\n");

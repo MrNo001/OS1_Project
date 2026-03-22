@@ -1,7 +1,3 @@
-//
-// Created by os on 7/3/25.
-//
-
 #ifndef OS_PROJECT_KCONSOLE_HPP
 #define OS_PROJECT_KCONSOLE_HPP
 

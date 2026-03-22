@@ -1,7 +1,3 @@
-//
-// Created by os on 3/2/25.
-//
-
 #include "../h/syscall_cpp.hpp"
 #include "../h/KConsole.hpp"
 

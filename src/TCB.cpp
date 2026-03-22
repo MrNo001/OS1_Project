@@ -51,7 +51,6 @@ void TCB::ThreadWrapper() {
     //USER SPACE
     running->body(running->args);
     running->setFinished(true);
-    //ovde nam isto treba kontekst switch
     thread_exit();
 }
 

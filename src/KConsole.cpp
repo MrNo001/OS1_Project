@@ -1,12 +1,9 @@
-//
-// Created by os on 7/3/25.
-//
-
 #include "../h/CharBuffer.hpp"
 #include "../h/KConsole.hpp"
 #include "../lib/console.h"
 #include "../h/riscv.hpp"
 #include "../h/TCB.hpp"
+#include "../h/syscall_c.hpp"
 
 
 KSemaphore* KConsole::hasCharactersOutput = 0;
@@ -104,21 +101,7 @@ void KConsole::putcSCHandler() {
 
 }
 
-// void KConsole::debugGetcSCHandler() {
-//     uint64 oldStack=TCB::running->saved_sp;
-//     uint64 result = (uint64) __getc();
-//     TCB::running->saved_sp = oldStack;
-//     Riscv::w_a0(result);
-//     return;
-// }
 
-// void KConsole::debugPutcSCHandler() {
-//     uint64 c = Riscv::r_a_stack(1);
-//     uint64 oldStack=TCB::running->saved_sp;
-//     __putc((char)c);
-//     TCB::running->saved_sp = oldStack;
-//     return;
-// }
 
 //------------THREAD--------------------
 

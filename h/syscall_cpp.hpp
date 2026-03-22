@@ -1,6 +1,3 @@
-//
-// Created by os on 3/2/25.
-//
 #ifndef _syscall_cpp
 #define _syscall_cpp
 

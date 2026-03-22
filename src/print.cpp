@@ -1,14 +1,6 @@
-//
-// Created by marko on 20.4.22..
-//
-
 #include "../h/print.hpp"
 #include "../h/syscall_c.hpp"
 #include "../h/riscv.hpp"
-
-
-//Todo,change this to reflect the implementation of putc
-
 
 void print(char const *string)
 {

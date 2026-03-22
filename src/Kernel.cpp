@@ -1,6 +1,3 @@
-//
-// Created by os on 4/2/25.
-//
 #include "../h/Kernel.hpp"
 #include "../h/riscv.hpp"
 #include "../h/TCB.hpp"
@@ -15,13 +12,11 @@
 
 
 extern void userMain();
-extern void userMainTest();
 
 void Kernel::userMainWrapper(void* args){
 
 
     userMain();
-    //userMainTest();
 
 }
 
@@ -51,7 +46,6 @@ void Kernel::Init() {
 
     while(!userThread->finished){
         TCB::dispatch();
-        //KConsole::kprintln("Kernel dispatching...");
     }
     KConsole::kprintln("User thread finished");
 
